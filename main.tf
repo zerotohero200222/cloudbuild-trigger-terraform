@@ -1,17 +1,19 @@
 # main.tf
-# Fixed version - Removed API enablement as they're already enabled
+# GitHub Cloud Build Trigger (NO Source Repo)
 
-# Cloud Build Trigger
-resource "google_cloudbuild_trigger" "csr_trigger" {
+resource "google_cloudbuild_trigger" "github_trigger" {
   name        = "cloud-run-scaling-${var.environment}"
-  description = "Build trigger for ${var.environment} environment"
+  description = "GitHub build trigger for ${var.environment}"
   project     = var.project_id
   location    = var.region
 
-  trigger_template {
-    project_id  = var.project_id
-    repo_name   = var.repository_name
-    branch_name = "^${var.branch_pattern}$"
+  github {
+    owner = var.repository_owner
+    name  = var.repository_name
+
+    push {
+      branch = "^${var.branch_pattern}$"
+    }
   }
 
   filename = "cloudbuild.yaml"
@@ -26,6 +28,7 @@ resource "google_cloudbuild_trigger" "csr_trigger" {
 
   included_files = [
     "main.tf",
+    "provider.tf",
     "variables.tf",
     "outputs.tf",
     "cloudbuild.yaml",
