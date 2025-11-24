@@ -1,21 +1,5 @@
-# Enable required APIs
-resource "google_project_service" "cloudbuild_api" {
-  project = var.project_id
-  service = "cloudbuild.googleapis.com"
-  disable_on_destroy = false
-}
-
-resource "google_project_service" "sourcerepo_api" {
-  project = var.project_id
-  service = "sourcerepo.googleapis.com"
-  disable_on_destroy = false
-}
-
-resource "google_project_service" "run_api" {
-  project = var.project_id
-  service = "run.googleapis.com"
-  disable_on_destroy = false
-}
+# main.tf
+# Fixed version - Removed API enablement as they're already enabled
 
 # Cloud Build Trigger
 resource "google_cloudbuild_trigger" "csr_trigger" {
@@ -27,7 +11,7 @@ resource "google_cloudbuild_trigger" "csr_trigger" {
   trigger_template {
     project_id  = var.project_id
     repo_name   = var.repository_name
-    branch_name = var.branch_pattern
+    branch_name = "^${var.branch_pattern}$"
   }
 
   filename = "cloudbuild.yaml"
@@ -51,11 +35,5 @@ resource "google_cloudbuild_trigger" "csr_trigger" {
   ignored_files = [
     "*.md",
     "docs/**"
-  ]
-
-  depends_on = [
-    google_project_service.cloudbuild_api,
-    google_project_service.sourcerepo_api,
-    google_project_service.run_api
   ]
 }
