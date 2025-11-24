@@ -4,27 +4,32 @@ variable "project_id" {
 }
 
 variable "region" {
-  description = "GCP Region"
+  description = "GCP region"
   type        = string
   default     = "us-central1"
 }
 
+variable "repository_owner" {
+  description = "GitHub repo owner"
+  type        = string
+}
+
 variable "repository_name" {
-  description = "Cloud Source Repository name"
+  description = "GitHub repo name"
   type        = string
 }
 
 variable "service_account_email" {
-  description = "Cloud Build service account email"
+  description = "Cloud Build service account"
   type        = string
 }
 
 variable "environment" {
-  description = "Environment name (dev, uat, prod)"
+  description = "Environment (dev / uat / prod)"
   type        = string
 }
 
 variable "branch_pattern" {
-  description = "Branch to trigger on"
+  description = "Branch regex to trigger on"
   type        = string
 }
